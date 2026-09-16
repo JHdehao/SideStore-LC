@@ -69,7 +69,11 @@ open class PersistentContainer: NSPersistentContainer, @unchecked Sendable {
             }
             
             if !self.managedObjectModel.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata) && description.shouldMigrateStoreAutomatically {
-                try await self.progressivelyMigratePersistentStore(to: self.managedObjectModel, configuration: description.configuration)
+                do {
+                    try await self.progressivelyMigratePersistentStore(to: self.managedObjectModel, configuration: description.configuration)
+                } catch {
+                    debugLog("Migration error: \(error)")
+                }
             }
         }
         
