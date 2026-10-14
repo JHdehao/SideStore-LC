@@ -98,3 +98,6 @@ tmp
 
 scratch*.sh
 *.sh
+# Linux 本机出包脚本与说明（tools/linux/README.md）
+!tools/**/*.sh
+!tools/**/*.md
