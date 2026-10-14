@@ -292,7 +292,7 @@ final class InstallAppOperation: BasePipelineOperation<InstallAppOperationContex
                 includingPropertiesForKeys: nil,
                 options: [.skipsSubdirectoryDescendants])
         {
-            for case let fileURL as URL in enumerator {
+            for case let fileURL as URL in enumerator where fileURL.pathExtension.lowercased() == "appex" {
                 guard let appExtensionBundle = Bundle(url: fileURL) else { continue }
                 guard let resignedAppExtensionBundle = ALTApplication(fileURL: appExtensionBundle.bundleURL) else { continue }
                 

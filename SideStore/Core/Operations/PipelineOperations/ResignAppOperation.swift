@@ -125,6 +125,9 @@ final class ResignAppOperation: BasePipelineOperation<InstallAppOperationContext
         if let directory = appBundle.builtInPlugInsURL,
            let enumerator = FileManager.default.enumerator(at: directory, includingPropertiesForKeys: nil, options: [.skipsSubdirectoryDescendants]) {
             while let fileURL = enumerator.nextObject() as? URL {
+                // Only .appex get their own profiles (same rule as ALTApplication.appExtensions); other plug-ins
+                // such as WebDriverAgent's .xctest are signed as part of the app.
+                guard fileURL.pathExtension.lowercased() == "appex" else { continue }
                 guard let appExtension = Bundle(url: fileURL) else { throw OperationError.missingAppBundle }
                 let updatedAppExBundleId = appExtension.bundleIdentifier?.replacingOccurrences(of: targetAppBundle.bundleIdentifier, with: bundleIdentifier)
                 try self.prepare(appExtension, bundleID: updatedAppExBundleId, profiles: profiles, appexBundleIds: appexBundleIds)
